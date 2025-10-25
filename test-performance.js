@@ -1,9 +1,9 @@
-// Simple test using built-in modules to send a message to 0249651750
+// Performance test script to measure message sending speed
 const https = require('https');
 
-function testSendMessage() {
+function testMessageTiming() {
     const phoneNumber = '0249651750';
-    const message = 'Hello! This is a test message from your WhatsApp bot. 🤖';
+    const message = `Performance test message sent at ${new Date().toLocaleTimeString()} 🚀`;
     
     const postData = JSON.stringify({
         number: phoneNumber,
@@ -21,7 +21,8 @@ function testSendMessage() {
         }
     };
     
-    console.log(`Sending test message to ${phoneNumber}...`);
+    console.log('🚀 Starting performance test...');
+    const startTime = Date.now();
     
     const req = https.request(options, (res) => {
         let data = '';
@@ -31,33 +32,40 @@ function testSendMessage() {
         });
         
         res.on('end', () => {
+            const totalTime = Date.now() - startTime;
+            
             try {
                 const response = JSON.parse(data);
                 if (res.statusCode === 200) {
                     console.log('✅ Message sent successfully!');
-                    console.log('Response:', response);
+                    console.log(`📊 Total request time: ${totalTime}ms`);
+                    console.log(`📊 Server processing time: ${response.duration || 'N/A'}`);
+                    console.log(`📱 Sent to: ${response.to}`);
                 } else {
                     console.log('❌ Failed to send message');
+                    console.log(`⏱️  Failed after: ${totalTime}ms`);
                     console.log('Error:', response);
                 }
             } catch (error) {
                 console.log('❌ Error parsing response:', error.message);
-                console.log('Raw response:', data);
+                console.log(`⏱️  Total time: ${totalTime}ms`);
+                console.log('Raw response:', data.substring(0, 200));
             }
         });
     });
     
     req.on('error', (error) => {
+        const totalTime = Date.now() - startTime;
         console.error('❌ Request error:', error.message);
-        console.log('Make sure your WhatsApp bot is running on https://whatsapp-bot-xwnv.onrender.com');
+        console.log(`⏱️  Failed after: ${totalTime}ms`);
     });
     
     req.write(postData);
     req.end();
 }
 
-// Check status first
-function checkStatus() {
+// Check if server is warm first
+function checkServerStatus() {
     const options = {
         hostname: 'whatsapp-bot-xwnv.onrender.com',
         port: 443,
@@ -65,6 +73,9 @@ function checkStatus() {
         method: 'GET'
     };
     
+    console.log('🔍 Checking server status...');
+    const startTime = Date.now();
+    
     const req = https.request(options, (res) => {
         let data = '';
         
@@ -73,27 +84,32 @@ function checkStatus() {
         });
         
         res.on('end', () => {
+            const responseTime = Date.now() - startTime;
+            
             try {
                 const response = JSON.parse(data);
+                console.log(`📊 Status check took: ${responseTime}ms`);
+                console.log(`🔥 Server uptime: ${Math.floor(response.uptime)}s`);
+                
                 if (response.ready) {
                     console.log('✅ WhatsApp client is ready!');
-                    testSendMessage();
+                    console.log('---');
+                    testMessageTiming();
                 } else {
-                    console.log('⏳ WhatsApp client is not ready yet. Please scan the QR code first.');
-                    console.log('Visit https://whatsapp-bot-xwnv.onrender.com/qr to see the QR code');
+                    console.log('⏳ WhatsApp client is not ready yet.');
+                    console.log('Visit https://whatsapp-bot-xwnv.onrender.com/qr to authenticate');
                 }
             } catch (error) {
-                console.log('❌ Error parsing status response:', error.message);
+                console.log('❌ Error parsing status:', error.message);
             }
         });
     });
     
     req.on('error', (error) => {
-        console.error('❌ Could not connect to the WhatsApp bot. Make sure it\'s running on https://whatsapp-bot-xwnv.onrender.com');
-        console.error('Error:', error.message);
+        console.error('❌ Status check failed:', error.message);
     });
     
     req.end();
 }
 
-checkStatus();
+checkServerStatus();

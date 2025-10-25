@@ -75,7 +75,20 @@ app.get('/qr', (req, res) => {
 });
 
 app.get('/status', (req, res) => {
-    res.json({ ready: clientReady });
+    res.json({ 
+        ready: clientReady,
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Keep-alive endpoint to prevent sleeping
+app.get('/ping', (req, res) => {
+    res.json({ 
+        status: 'alive', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
 });
 
 // Send message endpoint
@@ -107,12 +120,27 @@ app.post('/send-message', async (req, res) => {
         
         console.log(`Sending message to ${chatId}: ${message}`);
         
-        await client.sendMessage(chatId, message);
+        // Add timestamp for performance monitoring
+        const startTime = Date.now();
+        
+        // Send message with timeout handling
+        const messagePromise = client.sendMessage(chatId, message);
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Message send timeout')), 30000)
+        );
+        
+        await Promise.race([messagePromise, timeoutPromise]);
+        
+        const endTime = Date.now();
+        const duration = endTime - startTime;
+        
+        console.log(`Message sent successfully in ${duration}ms`);
         
         res.json({ 
             success: true, 
             message: 'Message sent successfully',
-            to: formattedNumber
+            to: formattedNumber,
+            duration: `${duration}ms`
         });
         
     } catch (error) {

@@ -8,7 +8,7 @@ async function testSendMessage() {
         
         console.log(`Sending test message to ${phoneNumber}...`);
         
-        const response = await fetch('https://whatsapp-bot-7or5.onrender.com/send-message', {
+        const response = await fetch('https://whatsapp-bot-xwnv.onrender.com/send-message', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json' 
@@ -53,7 +53,7 @@ async function testSendMessage() {
 async function checkStatus() {
     try {
         console.log('Checking WhatsApp bot status...');
-        const response = await fetch('https://whatsapp-bot-7or5.onrender.com/status');
+        const response = await fetch('https://whatsapp-bot-xwnv.onrender.com/status');
         const responseText = await response.text();
         
         console.log('Status endpoint response:', responseText);
@@ -66,7 +66,7 @@ async function checkStatus() {
                     await testSendMessage();
                 } else {
                     console.log('⏳ WhatsApp client is not ready yet. Please scan the QR code first.');
-                    console.log('Visit https://whatsapp-bot-7or5.onrender.com/qr to see the QR code');
+                    console.log('Visit https://whatsapp-bot-xwnv.onrender.com/qr to see the QR code');
                 }
             } catch (parseError) {
                 console.log('Status endpoint returned non-JSON response:', responseText.substring(0, 200));
@@ -76,7 +76,7 @@ async function checkStatus() {
             console.log('Response:', responseText.substring(0, 200));
         }
     } catch (error) {
-        console.error('❌ Could not connect to the WhatsApp bot. Make sure it\'s running on https://whatsapp-bot-7or5.onrender.com');
+        console.error('❌ Could not connect to the WhatsApp bot. Make sure it\'s running on https://whatsapp-bot-xwnv.onrender.com');
         console.error('Error:', error.message);
     }
 }
