@@ -5,7 +5,7 @@ const https = require('https');
 
 function pingServer() {
     const options = {
-        hostname: 'whatsapp-bot-xwnv.onrender.com',
+        hostname: 'whatsapp-bot-p8tz.onrender.com',
         port: 443,
         path: '/ping',
         method: 'GET'

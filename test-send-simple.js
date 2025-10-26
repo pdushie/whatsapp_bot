@@ -49,7 +49,7 @@ function testSendMessage() {
     
     req.on('error', (error) => {
         console.error('❌ Request error:', error.message);
-        console.log('Make sure your WhatsApp bot is running on https://whatsapp-bot-xwnv.onrender.com');
+        console.log('Make sure your WhatsApp bot is running on https://whatsapp-bot-p8tz.onrender.com');
     });
     
     req.write(postData);
@@ -59,7 +59,7 @@ function testSendMessage() {
 // Check status first
 function checkStatus() {
     const options = {
-        hostname: 'whatsapp-bot-xwnv.onrender.com',
+        hostname: 'whatsapp-bot-p8tz.onrender.com',
         port: 443,
         path: '/status',
         method: 'GET'
@@ -80,7 +80,7 @@ function checkStatus() {
                     testSendMessage();
                 } else {
                     console.log('⏳ WhatsApp client is not ready yet. Please scan the QR code first.');
-                    console.log('Visit https://whatsapp-bot-xwnv.onrender.com/qr to see the QR code');
+                    console.log('Visit https://whatsapp-bot-p8tz.onrender.com/qr to see the QR code');
                 }
             } catch (error) {
                 console.log('❌ Error parsing status response:', error.message);
@@ -89,7 +89,7 @@ function checkStatus() {
     });
     
     req.on('error', (error) => {
-        console.error('❌ Could not connect to the WhatsApp bot. Make sure it\'s running on https://whatsapp-bot-xwnv.onrender.com');
+        console.error('❌ Could not connect to the WhatsApp bot. Make sure it\'s running on https://whatsapp-bot-p8tz.onrender.com');
         console.error('Error:', error.message);
     });
     

@@ -67,7 +67,7 @@ function testMessageTiming() {
 // Check if server is warm first
 function checkServerStatus() {
     const options = {
-        hostname: 'whatsapp-bot-xwnv.onrender.com',
+        hostname: 'whatsapp-bot-p8tz.onrender.com',
         port: 443,
         path: '/status',
         method: 'GET'
@@ -97,7 +97,7 @@ function checkServerStatus() {
                     testMessageTiming();
                 } else {
                     console.log('⏳ WhatsApp client is not ready yet.');
-                    console.log('Visit https://whatsapp-bot-xwnv.onrender.com/qr to authenticate');
+                    console.log('Visit https://whatsapp-bot-p8tz.onrender.com/qr to authenticate');
                 }
             } catch (error) {
                 console.log('❌ Error parsing status:', error.message);
